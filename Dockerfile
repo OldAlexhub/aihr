@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
     libxml2-dev \
-    && R -e "install.packages(c('shiny', 'shinyWidgets', 'dplyr', 'mongolite', 'randomForest'))"
+    && R -e "install.packages(c('shiny', 'shinyWidgets', 'dplyr', 'mongolite', 'randomForest', 'dotenv'))"
 
 # Copy your Shiny app files to the container
 COPY . /app
