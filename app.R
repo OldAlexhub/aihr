@@ -4,11 +4,13 @@ library(shinyWidgets)
 library(dplyr)
 library(mongolite)
 library(randomForest)
+library(dotenv)
+load_dot_env(".env")
 
 # MongoDB Connection
 mongo_conn <- mongo(
-  collection= 'hr',
-  url= 'mongodb+srv://mgad:Mayo2016@cluster.ncfcu.mongodb.net/'
+  collection = 'hr',
+  url = Sys.getenv("MONGO_URL")
 )
 
 # Load Data from MongoDB
@@ -170,4 +172,3 @@ server <- function(input, output, session) {
 
 # Run the Shiny app
 shinyApp(ui = ui, server = server)
-
