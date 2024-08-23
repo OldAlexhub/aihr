@@ -1,11 +1,10 @@
-# Required Libraries
 library(shiny)
 library(shinyWidgets)
 library(dplyr)
 library(mongolite)
 library(randomForest)
-library(dotenv)
-load_dot_env(".env")
+
+
 
 # MongoDB Connection
 mongo_conn <- mongo(
