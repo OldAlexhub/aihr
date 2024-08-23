@@ -83,8 +83,7 @@ server <- function(input, output, session) {
     
     # Capture user inputs
     new_data <- data.frame(
-      element_id = nrow(data) + 1,
-      name= input$name,
+      name = input$name,
       Age = input$age,
       Gender = as.numeric(input$gender),
       EducationLevel = as.numeric(input$education),
@@ -100,15 +99,25 @@ server <- function(input, output, session) {
     # Preprocess data
     name <- new_data$name
     new_data <- new_data %>%
-      select(-name, -element_id)
+      select(-name)
     
     updateProgressBar(session, id = "progress", value = 50)
     
     data <- data %>%
-      select(-element_id)
+      select(-one_of("element_id"))
+    
+    # Handle Missing Values
+    data <- data %>%
+      na.omit()  # Removes rows with any NA values
+    
+    # Check if `new_data` has any missing values
+    if (anyNA(new_data)) {
+      showNotification("Missing values in the input data. Please ensure all fields are filled.", type = "error")
+      return(NULL)
+    }
     
     # Machine Learning Prediction
-    rfmodel <- randomForest(HiringDecision ~ . , data = data, ntree= 505)
+    rfmodel <- randomForest(HiringDecision ~ ., data = data, ntree = 505)
     
     prediction <- predict(rfmodel, new_data)
     
@@ -118,8 +127,7 @@ server <- function(input, output, session) {
     
     new_data <- new_data %>%
       mutate(
-        HiringDecision = prediction,
-        element_id = nrow(data) + 1
+        HiringDecision = prediction
       )
     
     # Insert new data into MongoDB
