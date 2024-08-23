@@ -1,12 +1,20 @@
 # Use the official R base image
 FROM r-base:latest
 
-# Install system dependencies
+# Install system dependencies and R packages dependencies
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
     libxml2-dev \
-    libv8-dev
+    libv8-dev \
+    build-essential \
+    g++ \
+    libbz2-dev \
+    liblzma-dev \
+    zlib1g-dev \
+    libpcre2-dev \
+    libgit2-dev \
+    && apt-get clean
 
 # Install required R packages
 RUN R -e "install.packages('shiny', repos='https://cran.rstudio.com/')"
